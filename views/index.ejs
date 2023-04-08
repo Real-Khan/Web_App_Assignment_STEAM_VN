@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple Web App</title>
+</head>
+
+<body>
+	<%- include('partials/navbar') %>
+
+		<div class="container">
+			<h1>User List</h1>
+			<input type="text" id="search" placeholder="Search users...">
+			<ul id="user-list">
+				<% users.forEach(user=> { %>
+					<li class="user-item">
+						<a href="/profile/<%= user.id %>">
+							<%= user.name %> (<%= user.username %>)
+						</a>
+					</li>
+					<% }) %>
+			</ul>
+		</div>
+
+		<script src="/js/search.js"></script>
+</body>
+
+</html>
