@@ -19,24 +19,27 @@ app.listen(PORT, () => {
 
 app.get('/profile/:id', async (req, res) => {
     const userId = req.params.id;
-    const userPromise = axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
-    const postsPromise = axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
-    const albumsPromise = axios.get(`https://jsonplaceholder.typicode.com/albums?userId=${userId}`);
-  
-    const [userResponse, postsResponse, albumsResponse] = await Promise.all([userPromise, postsPromise, albumsPromise]);
-  
+    // Fetch the user data
+    const userResponse = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
+
+    // Fetch the posts for the user
+    const postsResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
+
+    // Fetch the albums for the user
+    const albumsResponse = await axios.get(`https://jsonplaceholder.typicode.com/albums?userId=${userId}`);
+
     const user = userResponse.data;
     const posts = postsResponse.data;
     const albums = albumsResponse.data;
 
-    const postIds = posts.map(post => post.id);
-    const commentsPromises = postIds.map(postId => axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`));
-    const commentsResponses = await Promise.all(commentsPromises);
+    // Fetch the photos for each album  
+    const albumIds = albums.map(album => album.id);
+    const photosPromises = albumIds.map(albumId => axios.get(`https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`));
+    const photosResponses = await Promise.all(photosPromises);
   
-    for (let i = 0; i < posts.length; i++) {
-      posts[i].comments = commentsResponses[i].data;
+    for (let i = 0; i < albums.length; i++) {
+      albums[i].photos = photosResponses[i].data;
     }
-  
     res.render('profile', { user, posts, albums });
   });
 

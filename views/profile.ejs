@@ -27,6 +27,7 @@
                                 user.address.zipcode %>
             </p>
         </section>
+
         <section>
             <h2>Posts</h2>
             <div id="posts">
@@ -54,17 +55,27 @@
                     <% }); %>
             </div>
         </section>
+
         <section>
-            <h2>Photo Albums</h2>
-            <div id="albums">
-                <% albums.forEach(album=> { %>
-                    <div class="album">
-                        <h3>
-                            <%= album.title %>
-                        </h3>
-                        <!-- Add a link to the album photos page or display the photos here -->
-                    </div>
-                    <% }); %>
+            <h2>Albums</h2>
+            <div class="album-container">
+              <% albums.forEach(album => { %>
+                <div class="album">
+                  <h3><%= album.title %></h3>
+                  <div class="photo-container">
+                    <% if (album.photos) { %>
+                      <% album.photos.slice(0, 3).forEach(photo => { %>
+                        <div class="photo">
+                          <img src="<%= photo.thumbnailUrl %>" alt="<%= photo.title %>">
+                          <p><%= photo.title %></p>
+                        </div>
+                      <% }) %>
+                    <% } else { %>
+                      <p>No photos available for this album.</p>
+                    <% } %>
+                  </div>
+                </div>
+              <% }) %>
             </div>
         </section>
 </body>
