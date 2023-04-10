@@ -2,82 +2,108 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>User Profile</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/stylesheets/custom.css">
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
-    <%- include('partials/navbar') %>
+	<%- include('partials/navbar') %>
 
-        <h1>User Profile</h1>
-        <section>
-            <h2>
-                <%= user.name %>
-            </h2>
-            <p>Email: <%= user.email %>
-            </p>
-            <p>Username: <%= user.username %>
-            </p>
-            <p>Phone: <%= user.phone %>
-            </p>
-            <p>Website: <%= user.website %>
-            </p>
-            <p>Address: <%= user.address.street %>, <%= user.address.suite %>, <%= user.address.city %>, <%=
-                                user.address.zipcode %>
-            </p>
-        </section>
+		<h1>User Profile</h1>
+		<section>
+			<h2>
+				<%= user.name %>
+			</h2>
+			<p>Email: <%= user.email %>
+			</p>
+			<p>Username: <%= user.username %>
+			</p>
+			<p>Phone: <%= user.phone %>
+			</p>
+			<p>Website: <%= user.website %>
+			</p>
+			<p>Address: <%= user.address.street %>, <%= user.address.suite %>, <%= user.address.city %>, <%=
+								user.address.zipcode %>
+			</p>
+		</section>
 
-        <section>
-            <h2>Posts</h2>
-            <div id="posts">
-                <% posts.forEach(post=> { %>
-                    <div class="post">
-                        <h3>
-                            <%= post.title %>
-                        </h3>
-                        <p>
-                            <%= post.body %>
-                        </p>
-                        <div class="comments">
-                            <% post.comments.forEach(comment=> { %>
-                                <div class="comment">
-                                    <p><strong>
-                                            <%= comment.name %>
-                                        </strong> (<%= comment.email %>)</p>
-                                    <p>
-                                        <%= comment.body %>
-                                    </p>
-                                </div>
-                                <% }); %>
-                        </div>
-                    </div>
-                    <% }); %>
-            </div>
-        </section>
+		<section>
+			<!-- Display user's posts -->
+			<h2>Posts</h2>
+			<div class="row">
+				<% if (posts && posts.length> 0) { %>
+					<% posts.forEach(post=> { %>
+						<div class="col-md-6">
+							<div class="card mb-4">
+								<div class="card-body">
+									<h5 class="card-title">
+										<%= post.title %>
+									</h5>
+									<p class="card-text">
+										<%= post.body %>
+									</p>
+								</div>
+								<div class="card-footer">
+									<small class="text-muted">Comments:</small>
+									<ul>
+										<% if (post.comments) { %>
+											<% post.comments.forEach(comment=> { %>
+												<li>
+													<%= comment.name %>: <%= comment.body %>
+												</li>
+												<% }) %>
+													<% } else { %>
+														<li>No comments available for this post.</li>
+														<% } %>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<% }) %>
+							<% } else { %>
+								<div class="col-md-12">
+									<p>No posts available for this user.</p>
+								</div>
+								<% } %>
+			</div>
+		</section>
 
-        <section>
-            <h2>Albums</h2>
-            <div class="album-container">
-              <% albums.forEach(album => { %>
-                <div class="album">
-                  <h3><%= album.title %></h3>
-                  <div class="photo-container">
-                    <% if (album.photos) { %>
-                      <% album.photos.slice(0, 3).forEach(photo => { %>
-                        <div class="photo">
-                          <img src="<%= photo.thumbnailUrl %>" alt="<%= photo.title %>">
-                          <p><%= photo.title %></p>
-                        </div>
-                      <% }) %>
-                    <% } else { %>
-                      <p>No photos available for this album.</p>
-                    <% } %>
-                  </div>
-                </div>
-              <% }) %>
-            </div>
-        </section>
+		<section>
+			<!-- Display user's albums -->
+			<h2>Albums</h2>
+			<div class="row">
+				<% albums.forEach(album=> { %>
+					<div class="col-md-4">
+						<div class="card mb-4">
+							<div class="card-body">
+								<h5 class="card-title">
+									<%= album.title %>
+								</h5>
+								<% if (album.photos) { %>
+									<% album.photos.slice(0, 3).forEach(photo=> { %>
+										<img src="<%= photo.thumbnailUrl %>" alt="<%= photo.title %>"
+											class="img-thumbnail mx-1 my-2">
+										<% }) %>
+											<% } else { %>
+												<p>No photos available for this album.</p>
+												<% } %>
+							</div>
+						</div>
+					</div>
+					<% }) %>
+			</div>
+			</div>
+		</section>
 </body>
 
 </html>
